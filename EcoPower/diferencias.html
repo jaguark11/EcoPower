@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diferencias | EcoPower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="sub-page">
+
+    <header class="navbar-wrapper">
+        <nav class="navbar solid-nav">
+            <a href="index.html" class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                    <path d="M13 10V3L5 14H11V21L19 10H13Z" fill="#FDD835"/>
+                    <path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C15.01 22 17.71 20.67 19.55 18.52L12 2Z" fill="#81C784" fill-opacity="0.3"/>
+                </svg>
+                <span>EcoPower</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="potencia.html">Potencia</a></li>
+                <li><a href="energia.html">Energía</a></li>
+                <li><a href="diferencias.html" class="active">Diferencia</a></li>
+                <li><a href="calculadora.html">Calculadora</a></li>
+                <li><a href="consejos.html">Consejos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container expanded-page">
+        <section class="bubble difference-bubble giant-bubble">
+            <div class="bubble-text full-width center-text">
+                <h2>El Motor vs El Tanque</h2>
+                <p class="large-text">Es vital diferenciar estas dos magnitudes físicas para entender tu recibo de luz y cómo ahorrar.</p>
+            </div>
+            
+            <div class="split-panel full-split">
+                <div class="split-side logic-side">
+                    <div class="icon-wrap">⚡</div>
+                    <h3>Velocidad = Potencia (W)</h3>
+                    <p>Cuánto corre el coche en este instante exacto (Watts).</p>
+                    <ul class="fast-facts">
+                        <li>Fórmula: <code>P = E / t</code> (Tasa de consumo)</li>
+                        <li>Ejemplo: Una TV de 100W, siempre "gasta" 100W por segundo mientras está prendida.</li>
+                    </ul>
+                </div>
+                
+                <div class="split-image logic-img">
+                    <img src="assets/car_tank_1772921066853.png" alt="Coche vs Tanque">
+                </div>
+                
+                <div class="split-side logic-side">
+                    <div class="icon-wrap">🔋</div>
+                    <h3>Gasolina = Energía (Wh)</h3>
+                    <p>Cuánta gasolina se ha gastado del tanque en total.</p>
+                    <ul class="fast-facts">
+                        <li>Fórmula: <code>E = P * t</code> (Consumo acumulado)</li>
+                        <li>Ejemplo: Esa TV de 100W prendida durante 5 horas, ha consumido 500Wh de tu tanque.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bubble-text full-width center-text" style="margin-top: 40px;">
+                <a href="calculadora.html" class="btn-primary">Siguiente: ¡Usa la Calculadora! →</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>EcoPower - Ciencia y Sostenibilidad &copy; 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

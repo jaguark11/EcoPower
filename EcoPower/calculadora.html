@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Avanzada | EcoPower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="sub-page">
+
+    <header class="navbar-wrapper">
+        <nav class="navbar solid-nav">
+            <a href="index.html" class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                    <path d="M13 10V3L5 14H11V21L19 10H13Z" fill="#FDD835"/>
+                    <path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C15.01 22 17.71 20.67 19.55 18.52L12 2Z" fill="#81C784" fill-opacity="0.3"/>
+                </svg>
+                <span>EcoPower</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="potencia.html">Potencia</a></li>
+                <li><a href="energia.html">Energía</a></li>
+                <li><a href="diferencias.html">Diferencia</a></li>
+                <li><a href="calculadora.html" class="active">Calculadora</a></li>
+                <li><a href="consejos.html">Consejos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container expanded-page">
+        <section class="bubble calculator-bubble advanced-calc">
+            <div class="bubble-text full-width">
+                <div class="calc-header">
+                    <h2>Calculadora de Consumo Dinámica</h2>
+                    <p>Estima visualmente cuánta energía requiere un entorno eléctrico. Altere las variables a continuación.</p>
+                </div>
+
+                <div class="calc-grid">
+                    <!-- Formulario Interactivo -->
+                    <div class="calc-form-container">
+                        <h3>Añadir Carga</h3>
+                        <form id="calcForm" class="calc-form">
+                            <div class="form-group">
+                                <label for="applianceSelect">1. Seleccione Dispositivo</label>
+                                <select id="applianceSelect">
+                                    <option value="100" data-name="Televisor" data-icon="📺">📺 Televisor (100 W)</option>
+                                    <option value="400" data-name="Consola Videojuegos" data-icon="🎮">🎮 Consola Videojuegos (400 W)</option>
+                                    <option value="150" data-name="Refrigerador" data-icon="❄️">❄️ Refrigerador (150 W)</option>
+                                    <option value="10" data-name="Foco LED" data-icon="💡">💡 Foco LED (10 W)</option>
+                                    <option value="custom" data-name="Personalizado" data-icon="⚙️">⚙️ Personalizado...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group custom-power-group" id="customPowerGroup" style="display: none;">
+                                <label for="customPower">Potencia Personalizada (W)</label>
+                                <input type="number" id="customPower" value="50" min="1" max="10000">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="qtyInput">2. Cantidad del Dispositivo</label>
+                                <div class="slider-group">
+                                    <input type="range" id="qtyInput" min="1" max="20" value="1">
+                                    <span id="qtyVal" class="val-display">1</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hoursInput">3. Tiempo de Uso Continuo (Horas)</label>
+                                <div class="slider-group">
+                                    <input type="range" id="hoursInput" min="1" max="24" value="1">
+                                    <span id="hoursVal" class="val-display">1 h</span>
+                                </div>
+                            </div>
+
+                            <button type="button" id="addLoadBtn" class="btn-primary full-btn">Añadir al Cálculo</button>
+                        </form>
+                    </div>
+
+                    <!-- Visualización del Consumo -->
+                    <div class="calc-result-container">
+                        <div class="jar-container v2-jar">
+                            <div class="jar">
+                                <div class="jar-fill" id="advJarFill"></div>
+                                <div class="jar-particles" id="jarParticles"></div>
+                            </div>
+                            <div class="jar-label">
+                                Consumo Total Módulo:<br>
+                                <span class="huge-number"><span id="advTotalEnergy">0</span> Wh</span>
+                                <div class="kwh-conversion">= <span id="kwhValue">0.00</span> kWh</div>
+                            </div>
+                        </div>
+
+                        <div class="load-list-container">
+                            <h4>Cargas Activas</h4>
+                            <ul id="loadList" class="load-list">
+                                <!-- JS Injects here -->
+                                <li class="empty-list">No hay dispositivos añadidos.</li>
+                            </ul>
+                            <button id="clearBtn" class="btn-secondary small-btn" style="display:none;">Limpiar Todo</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="engineer-trick">
+                    <h3>🛠️ Lección: <code>E = Cantidad × P × t</code></h3>
+                    <p>La ecuación termodinámica que rige tu hogar es simple: Para saber el gasto económico mensual, multiplicas la <strong>Cantidad</strong> de aparatos, por su <strong>Potencia</strong> (Watts), por las <strong>Horas</strong> de uso. Eso te da los Wh totales.</p>
+                </div>
+            </div>
+            
+            <div class="bubble-text full-width center-text" style="margin-top: 30px;">
+                <a href="consejos.html" class="btn-primary">Siguiente: Aprende a Optimizar →</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>EcoPower - Ciencia y Sostenibilidad &copy; 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
