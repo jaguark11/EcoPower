@@ -1,84 +1,101 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    /* =========================================
-       Advanced Calculator Logic (V2)
-    ========================================= */
     const calcForm = document.getElementById('calcForm');
     
-    // Only run if we are on the calculator page
     if (calcForm) {
         const applianceSelect = document.getElementById('applianceSelect');
         const customPowerGroup = document.getElementById('customPowerGroup');
         const customPowerInput = document.getElementById('customPower');
-        
         const qtyInput = document.getElementById('qtyInput');
         const qtyVal = document.getElementById('qtyVal');
-        
         const hoursInput = document.getElementById('hoursInput');
         const hoursVal = document.getElementById('hoursVal');
-        
         const addLoadBtn = document.getElementById('addLoadBtn');
         const loadList = document.getElementById('loadList');
         const clearBtn = document.getElementById('clearBtn');
-        
         const advTotalEnergy = document.getElementById('advTotalEnergy');
         const kwhValue = document.getElementById('kwhValue');
         const advJarFill = document.getElementById('advJarFill');
         
-        // State
-        let loads = [];
-        const MAX_ENERGY_FOR_JAR = 5000; // 5 kWh to fill the visual jar completely
+        const MAX_ENERGY_FOR_JAR = 10000; 
 
-        // Listeners for Sliders to update text in real-time
-        qtyInput.addEventListener('input', (e) => qtyVal.innerText = e.target.value);
-        hoursInput.addEventListener('input', (e) => hoursVal.innerText = `${e.target.value} h`);
+        // Seeding de datos para que el sistema no nazca vacío
+        const initialSeed = [
+            { id: crypto.randomUUID(), name: "Foco LED", icon: "💡", power: 10, qty: 5, hours: 6, energy: 300, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "Refrigerador", icon: "❄️", power: 150, qty: 1, hours: 24, energy: 3600, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "Televisor", icon: "📺", power: 100, qty: 1, hours: 4, energy: 400, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "Consola Videojuegos", icon: "🎮", power: 400, qty: 1, hours: 2, energy: 800, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "Celular", icon: "📱", power: 15, qty: 2, hours: 3, energy: 90, timestamp: new Date().toISOString() }
+        ];
 
-        // Listener for Select to show/hide custom power input
-        applianceSelect.addEventListener('change', (e) => {
-            if(e.target.value === 'custom') {
-                customPowerGroup.style.display = 'block';
+        let currentLoads = [];
+        const storageKey = 'ecoPower_system_state';
+
+        const syncFromStorage = () => {
+            const remoteData = localStorage.getItem(storageKey);
+            if (remoteData) {
+                currentLoads = JSON.parse(remoteData);
             } else {
-                customPowerGroup.style.display = 'none';
+                currentLoads = initialSeed;
+                saveState();
+            }
+            renderEngine();
+        };
+
+        const saveState = () => {
+            // Ordenamiento determinista como tie-breaker de seguridad
+            currentLoads.sort((a, b) => a.id.localeCompare(b.id));
+            localStorage.setItem(storageKey, JSON.stringify(currentLoads));
+        };
+
+        // Listener para concurrencia entre pestañas
+        window.addEventListener('storage', (e) => {
+            if (e.key === storageKey && e.newValue) {
+                currentLoads = JSON.parse(e.newValue);
+                renderEngine();
             }
         });
 
-        // Add Load to list
+        qtyInput.addEventListener('input', (e) => qtyVal.innerText = e.target.value);
+        hoursInput.addEventListener('input', (e) => hoursVal.innerText = `${e.target.value} h`);
+
+        applianceSelect.addEventListener('change', (e) => {
+            customPowerGroup.style.display = e.target.value === 'custom' ? 'block' : 'none';
+        });
+
         addLoadBtn.addEventListener('click', () => {
-            let power = 0;
-            let name = "";
-            let icon = "";
+            let powerVal = 0, nodeName = "", nodeIcon = "";
 
             if (applianceSelect.value === 'custom') {
-                power = parseInt(customPowerInput.value) || 0;
-                name = "Dispositivo Personalizado";
-                icon = "⚙️";
+                powerVal = parseInt(customPowerInput.value) || 0;
+                nodeName = "Personalizado";
+                nodeIcon = "⚙️";
             } else {
-                power = parseInt(applianceSelect.value);
-                const selectedOption = applianceSelect.options[applianceSelect.selectedIndex];
-                name = selectedOption.getAttribute('data-name');
-                icon = selectedOption.getAttribute('data-icon');
+                powerVal = parseInt(applianceSelect.value);
+                const opt = applianceSelect.options[applianceSelect.selectedIndex];
+                nodeName = opt.getAttribute('data-name');
+                nodeIcon = opt.getAttribute('data-icon');
             }
 
-            const qty = parseInt(qtyInput.value) || 1;
-            const hours = parseInt(hoursInput.value) || 1;
+            const qVal = parseInt(qtyInput.value) || 1;
+            const hVal = parseInt(hoursInput.value) || 1;
             
-            if (power > 0 && qty > 0 && hours > 0) {
-                const energy = power * qty * hours;
-                
-                const load = {
-                    id: Date.now(),
-                    name,
-                    icon,
-                    power,
-                    qty,
-                    hours,
-                    energy
+            if (powerVal > 0 && qVal > 0 && hVal > 0) {
+                const newLoad = {
+                    id: crypto.randomUUID(),
+                    name: nodeName,
+                    icon: nodeIcon,
+                    power: powerVal,
+                    qty: qVal,
+                    hours: hVal,
+                    energy: powerVal * qVal * hVal,
+                    timestamp: new Date().toISOString()
                 };
                 
-                loads.push(load);
-                updateUI();
+                currentLoads.push(newLoad);
+                saveState();
+                renderEngine();
                 
-                // Reset form to defaults
+                // Reset
                 applianceSelect.selectedIndex = 0;
                 applianceSelect.dispatchEvent(new Event('change'));
                 qtyInput.value = 1; qtyVal.innerText = "1";
@@ -86,75 +103,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Clear All
         clearBtn.addEventListener('click', () => {
-            loads = [];
-            updateUI();
+            currentLoads = [];
+            saveState();
+            renderEngine();
         });
 
-        // Remove single item
-        window.removeLoad = function(id) {
-            loads = loads.filter(l => l.id !== id);
-            updateUI();
+        window.removeLoad = function(targetId) {
+            currentLoads = currentLoads.filter(item => item.id !== targetId);
+            saveState();
+            renderEngine();
         };
 
-        // Core UI Update function Calculate E = P * Qty * Time
-        function updateUI() {
-            // Calculate Total Energy
-            const totalEnergyWh = loads.reduce((sum, load) => sum + load.energy, 0);
-            const totalEnergyKWh = (totalEnergyWh / 1000).toFixed(2);
+        function renderEngine() {
+            const totalWh = currentLoads.reduce((sum, item) => sum + item.energy, 0);
+            kwhValue.innerText = (totalWh / 1000).toFixed(2);
+            advTotalEnergy.innerText = totalWh;
 
-            // Animate number
-            animateValue(advTotalEnergy, parseInt(advTotalEnergy.innerText || 0), totalEnergyWh, 500);
-            kwhValue.innerText = totalEnergyKWh;
-
-            // Render List
             loadList.innerHTML = '';
-            if (loads.length === 0) {
-                loadList.innerHTML = '<li class="empty-list">No hay dispositivos añadidos.</li>';
+            if (currentLoads.length === 0) {
+                loadList.innerHTML = '<li class="empty-list">Sin datos de carga.</li>';
                 clearBtn.style.display = 'none';
             } else {
-                loads.forEach(load => {
+                currentLoads.forEach(item => {
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <div>
-                            <strong>${load.icon} ${load.name}</strong><br>
-                            <small>${load.qty} un. × ${load.power}W × ${load.hours}h = <strong>${load.energy} Wh</strong></small>
+                            <strong>${item.icon} ${item.name}</strong><br>
+                            <small>${item.qty} un. × ${item.power}W × ${item.hours}h = <strong>${item.energy} Wh</strong></small>
                         </div>
-                        <button class="remove-btn" onclick="removeLoad(${load.id})" title="Eliminar">×</button>
+                        <button class="remove-btn" onclick="removeLoad('${item.id}')" title="Depurar">×</button>
                     `;
                     loadList.appendChild(li);
                 });
                 clearBtn.style.display = 'block';
             }
 
-            // Update Jar Fill visually
-            let fillPercentage = (totalEnergyWh / MAX_ENERGY_FOR_JAR) * 100;
-            if (fillPercentage > 100) fillPercentage = 100;
-            advJarFill.style.height = `${fillPercentage}%`;
+            let fillRatio = (totalWh / MAX_ENERGY_FOR_JAR) * 100;
+            advJarFill.style.height = `${Math.min(fillRatio, 100)}%`;
             
-            // Change color dynamically if consumption is high
-            if(fillPercentage > 80) {
-                advJarFill.style.background = 'linear-gradient(0deg, #ef4444 0%, #fca5a5 100%)'; // Red for high
-            } else if (fillPercentage > 40) {
-                advJarFill.style.background = 'linear-gradient(0deg, #f59e0b 0%, #fcd34d 100%)'; // Orange/Yellow 
-            } else {
-                advJarFill.style.background = 'linear-gradient(0deg, var(--color-secondary) 0%, #a7f3d0 100%)'; // Green for normal
-            }
+            if(fillRatio > 80) advJarFill.style.background = 'linear-gradient(0deg, #ef4444 0%, #fca5a5 100%)';
+            else if (fillRatio > 40) advJarFill.style.background = 'linear-gradient(0deg, #f59e0b 0%, #fcd34d 100%)';
+            else advJarFill.style.background = 'linear-gradient(0deg, var(--color-secondary) 0%, #a7f3d0 100%)';
         }
 
-        // Helper to animate numbers
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
+        // Init
+        syncFromStorage();
     }
 });
