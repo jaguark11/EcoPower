@@ -16,15 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const kwhValue = document.getElementById('kwhValue');
         const advJarFill = document.getElementById('advJarFill');
         
-        const MAX_ENERGY_FOR_JAR = 10000; 
+        // El límite sube a 30kWh para poder visualizar las grandes cargas del Tesla sin romper la UI
+        const MAX_ENERGY_FOR_JAR = 30000; 
 
-        // Seeding de datos para que el sistema no nazca vacío
+        // Seeding avanzado con modelos solicitados y generación solar (negativa)
         const initialSeed = [
-            { id: crypto.randomUUID(), name: "Foco LED", icon: "💡", power: 10, qty: 5, hours: 6, energy: 300, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "Refrigerador", icon: "❄️", power: 150, qty: 1, hours: 24, energy: 3600, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "Televisor", icon: "📺", power: 100, qty: 1, hours: 4, energy: 400, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "Consola Videojuegos", icon: "🎮", power: 400, qty: 1, hours: 2, energy: 800, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "Celular", icon: "📱", power: 15, qty: 2, hours: 3, energy: 90, timestamp: new Date().toISOString() }
+            { id: crypto.randomUUID(), name: "Tesla Model 3 (Wallbox)", icon: "🚗", power: 11500, qty: 1, hours: 2, energy: 23000, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "iPhone 15 Pro", icon: "📱", power: 20, qty: 1, hours: 2, energy: 40, timestamp: new Date().toISOString() },
+            { id: crypto.randomUUID(), name: "Panel Solar Mono.", icon: "☀️", power: -400, qty: 5, hours: 5, energy: -10000, timestamp: new Date().toISOString() }
         ];
 
         let currentLoads = [];
@@ -42,12 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const saveState = () => {
-            // Ordenamiento determinista como tie-breaker de seguridad
             currentLoads.sort((a, b) => a.id.localeCompare(b.id));
             localStorage.setItem(storageKey, JSON.stringify(currentLoads));
         };
 
-        // Listener para concurrencia entre pestañas
         window.addEventListener('storage', (e) => {
             if (e.key === storageKey && e.newValue) {
                 currentLoads = JSON.parse(e.newValue);
@@ -67,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (applianceSelect.value === 'custom') {
                 powerVal = parseInt(customPowerInput.value) || 0;
-                nodeName = "Personalizado";
+                nodeName = "Registro Personalizado";
                 nodeIcon = "⚙️";
             } else {
                 powerVal = parseInt(applianceSelect.value);
@@ -79,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const qVal = parseInt(qtyInput.value) || 1;
             const hVal = parseInt(hoursInput.value) || 1;
             
-            if (powerVal > 0 && qVal > 0 && hVal > 0) {
+            if (powerVal !== 0 && qVal > 0 && hVal > 0) {
                 const newLoad = {
                     id: crypto.randomUUID(),
                     name: nodeName,
@@ -95,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveState();
                 renderEngine();
                 
-                // Reset
                 applianceSelect.selectedIndex = 0;
                 applianceSelect.dispatchEvent(new Event('change'));
                 qtyInput.value = 1; qtyVal.innerText = "1";
@@ -117,37 +113,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function renderEngine() {
             const totalWh = currentLoads.reduce((sum, item) => sum + item.energy, 0);
+            
             kwhValue.innerText = (totalWh / 1000).toFixed(2);
             advTotalEnergy.innerText = totalWh;
 
             loadList.innerHTML = '';
             if (currentLoads.length === 0) {
-                loadList.innerHTML = '<li class="empty-list">Sin datos de carga.</li>';
+                loadList.innerHTML = '<li class="empty-list">Sin datos de carga o generación.</li>';
                 clearBtn.style.display = 'none';
             } else {
                 currentLoads.forEach(item => {
                     const li = document.createElement('li');
+                    const isGen = item.power < 0;
+                    li.style.borderLeftColor = isGen ? '#10b981' : '#3b82f6';
                     li.innerHTML = `
-                        <div>
+                        <div style="flex:1;">
                             <strong>${item.icon} ${item.name}</strong><br>
-                            <small>${item.qty} un. × ${item.power}W × ${item.hours}h = <strong>${item.energy} Wh</strong></small>
+                            <small>${item.qty} un. × ${item.power}W × ${item.hours}h = <strong style="color: ${isGen ? '#10b981' : 'inherit'}">${item.energy} Wh</strong></small>
                         </div>
-                        <button class="remove-btn" onclick="removeLoad('${item.id}')" title="Depurar">×</button>
+                        <button class="remove-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;" onclick="removeLoad('${item.id}')" title="Depurar">×</button>
                     `;
                     loadList.appendChild(li);
                 });
                 clearBtn.style.display = 'block';
             }
 
-            let fillRatio = (totalWh / MAX_ENERGY_FOR_JAR) * 100;
+            // No mostramos llenado negativo en el frasco visual
+            const displayWh = totalWh < 0 ? 0 : totalWh;
+            let fillRatio = (displayWh / MAX_ENERGY_FOR_JAR) * 100;
             advJarFill.style.height = `${Math.min(fillRatio, 100)}%`;
             
-            if(fillRatio > 80) advJarFill.style.background = 'linear-gradient(0deg, #ef4444 0%, #fca5a5 100%)';
-            else if (fillRatio > 40) advJarFill.style.background = 'linear-gradient(0deg, #f59e0b 0%, #fcd34d 100%)';
-            else advJarFill.style.background = 'linear-gradient(0deg, var(--color-secondary) 0%, #a7f3d0 100%)';
+            if (totalWh < 0) {
+                // Color verde esmeralda puro cuando la generación supera al consumo
+                advJarFill.style.background = 'linear-gradient(0deg, #10b981 0%, #34d399 100%)'; 
+            } else if(fillRatio > 80) {
+                advJarFill.style.background = 'linear-gradient(0deg, #ef4444 0%, #fca5a5 100%)';
+            } else if (fillRatio > 40) {
+                advJarFill.style.background = 'linear-gradient(0deg, #f59e0b 0%, #fcd34d 100%)';
+            } else {
+                advJarFill.style.background = 'linear-gradient(0deg, var(--color-secondary) 0%, #a7f3d0 100%)';
+            }
         }
 
-        // Init
         syncFromStorage();
     }
 });
