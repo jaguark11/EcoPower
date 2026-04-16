@@ -27,6 +27,7 @@
                 <li><a href="diferencias.html">Diferencia</a></li>
                 <li><a href="calculadora.html" class="active">Calculadora</a></li>
                 <li><a href="consejos.html">Consejos</a></li>
+                <li><a href="sostenibilidad.html">Sostenibilidad</a></li>
             </ul>
         </nav>
     </header>
@@ -36,32 +37,32 @@
             <div class="bubble-text full-width">
                 <div class="calc-header">
                     <h2>Calculadora de Consumo Dinámica</h2>
-                    <p>Estima visualmente cuánta energía requiere un entorno eléctrico. Altere las variables a continuación.</p>
+                    <p>Calcula el impacto de dispositivos y la inyección solar (usa valores negativos para generación).</p>
                 </div>
 
                 <div class="calc-grid">
-                    <!-- Formulario Interactivo -->
                     <div class="calc-form-container">
-                        <h3>Añadir Carga</h3>
+                        <h3>Añadir Sistema</h3>
                         <form id="calcForm" class="calc-form">
                             <div class="form-group">
-                                <label for="applianceSelect">1. Seleccione Dispositivo</label>
+                                <label for="applianceSelect">1. Seleccione Dispositivo/Generador</label>
                                 <select id="applianceSelect">
-                                    <option value="100" data-name="Televisor" data-icon="📺">📺 Televisor (100 W)</option>
-                                    <option value="400" data-name="Consola Videojuegos" data-icon="🎮">🎮 Consola Videojuegos (400 W)</option>
-                                    <option value="150" data-name="Refrigerador" data-icon="❄️">❄️ Refrigerador (150 W)</option>
-                                    <option value="10" data-name="Foco LED" data-icon="💡">💡 Foco LED (10 W)</option>
+                                    <option value="11500" data-name="Tesla Model 3 (Wallbox)" data-icon="🚗">🚗 Tesla Model 3 Wallbox (11,500 W)</option>
+                                    <option value="20" data-name="iPhone 15 Pro" data-icon="📱">📱 iPhone 15 Pro (20 W)</option>
+                                    <option value="-400" data-name="Panel Solar Monocristalino" data-icon="☀️">☀️ Panel Solar Generación (-400 W)</option>
+                                    <option value="150" data-name="Refrigerador LG Inverter" data-icon="❄️">❄️ Refrigerador Inverter (150 W)</option>
+                                    <option value="10" data-name="Foco LED Philips" data-icon="💡">💡 Foco LED (10 W)</option>
                                     <option value="custom" data-name="Personalizado" data-icon="⚙️">⚙️ Personalizado...</option>
                                 </select>
                             </div>
 
                             <div class="form-group custom-power-group" id="customPowerGroup" style="display: none;">
-                                <label for="customPower">Potencia Personalizada (W)</label>
-                                <input type="number" id="customPower" value="50" min="1" max="10000">
+                                <label for="customPower">Potencia Personalizada (Vatios) - Usa negativos para generación</label>
+                                <input type="number" id="customPower" value="50" max="100000">
                             </div>
 
                             <div class="form-group">
-                                <label for="qtyInput">2. Cantidad del Dispositivo</label>
+                                <label for="qtyInput">2. Cantidad</label>
                                 <div class="slider-group">
                                     <input type="range" id="qtyInput" min="1" max="20" value="1">
                                     <span id="qtyVal" class="val-display">1</span>
@@ -69,18 +70,17 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="hoursInput">3. Tiempo de Uso Continuo (Horas)</label>
+                                <label for="hoursInput">3. Tiempo de Uso/Sol (Horas)</label>
                                 <div class="slider-group">
                                     <input type="range" id="hoursInput" min="1" max="24" value="1">
                                     <span id="hoursVal" class="val-display">1 h</span>
                                 </div>
                             </div>
 
-                            <button type="button" id="addLoadBtn" class="btn-primary full-btn">Añadir al Cálculo</button>
+                            <button type="button" id="addLoadBtn" class="btn-primary full-btn">Procesar Registro</button>
                         </form>
                     </div>
 
-                    <!-- Visualización del Consumo -->
                     <div class="calc-result-container">
                         <div class="jar-container v2-jar">
                             <div class="jar">
@@ -88,26 +88,25 @@
                                 <div class="jar-particles" id="jarParticles"></div>
                             </div>
                             <div class="jar-label">
-                                Consumo Total Módulo:<br>
+                                Consumo Neto:<br>
                                 <span class="huge-number"><span id="advTotalEnergy">0</span> Wh</span>
                                 <div class="kwh-conversion">= <span id="kwhValue">0.00</span> kWh</div>
                             </div>
                         </div>
 
                         <div class="load-list-container">
-                            <h4>Cargas Activas</h4>
+                            <h4>Cargas y Generadores</h4>
                             <ul id="loadList" class="load-list">
-                                <!-- JS Injects here -->
-                                <li class="empty-list">No hay dispositivos añadidos.</li>
+                                <li class="empty-list">No hay sistemas añadidos.</li>
                             </ul>
-                            <button id="clearBtn" class="btn-secondary small-btn" style="display:none;">Limpiar Todo</button>
+                            <button id="clearBtn" class="btn-secondary small-btn" style="display:none; margin-top: 10px;">Limpiar Estado</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="engineer-trick">
                     <h3>🛠️ Lección: <code>E = Cantidad × P × t</code></h3>
-                    <p>La ecuación termodinámica que rige tu hogar es simple: Para saber el gasto económico mensual, multiplicas la <strong>Cantidad</strong> de aparatos, por su <strong>Potencia</strong> (Watts), por las <strong>Horas</strong> de uso. Eso te da los Wh totales.</p>
+                    <p>La ecuación termodinámica que rige tu hogar es simple: Para saber el gasto económico mensual, multiplicas la <strong>Cantidad</strong> de aparatos, por su <strong>Potencia</strong> (Vatios), por las <strong>Horas</strong> de uso. Eso te da los Wh totales. Si añades paneles solares, estos inyectan energía negativa, reduciendo el total neto.</p>
                 </div>
             </div>
             
