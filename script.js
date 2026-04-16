@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const kwhValue = document.getElementById('kwhValue');
         const advJarFill = document.getElementById('advJarFill');
         
-        // El límite sube a 30kWh para poder visualizar las grandes cargas del Tesla sin romper la UI
+        // El límite se establece en 30 kWh para soportar visualmente grandes cargas sin desbordar la interfaz
         const MAX_ENERGY_FOR_JAR = 30000; 
 
-        // Seeding avanzado con modelos solicitados y generación solar (negativa)
+        // Estado inicial de la obra (Seeding estricto)
         const initialSeed = [
             { id: crypto.randomUUID(), name: "Tesla Model 3 (Wallbox)", icon: "🚗", power: 11500, qty: 1, hours: 2, energy: 23000, timestamp: new Date().toISOString() },
             { id: crypto.randomUUID(), name: "iPhone 15 Pro", icon: "📱", power: 20, qty: 1, hours: 2, energy: 40, timestamp: new Date().toISOString() },
@@ -41,10 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const saveState = () => {
+            // Ordenamiento determinista para garantizar consistencia estructural
             currentLoads.sort((a, b) => a.id.localeCompare(b.id));
             localStorage.setItem(storageKey, JSON.stringify(currentLoads));
         };
 
+        // Bloqueo de concurrencia: Sincronización absoluta entre pestañas
         window.addEventListener('storage', (e) => {
             if (e.key === storageKey && e.newValue) {
                 currentLoads = JSON.parse(e.newValue);
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const qVal = parseInt(qtyInput.value) || 1;
             const hVal = parseInt(hoursInput.value) || 1;
             
+            // Validación estricta. Se aceptan valores negativos para representar la generación fotovoltaica
             if (powerVal !== 0 && qVal > 0 && hVal > 0) {
                 const newLoad = {
                     id: crypto.randomUUID(),
@@ -92,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveState();
                 renderEngine();
                 
+                // Purgar entradas tras el procesamiento
                 applianceSelect.selectedIndex = 0;
                 applianceSelect.dispatchEvent(new Event('change'));
                 qtyInput.value = 1; qtyVal.innerText = "1";
@@ -125,26 +129,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentLoads.forEach(item => {
                     const li = document.createElement('li');
                     const isGen = item.power < 0;
+                    
+                    // Inyección de estilos dinámicos para distinguir la generación (verde) del consumo (azul)
                     li.style.borderLeftColor = isGen ? '#10b981' : '#3b82f6';
+                    li.style.background = 'var(--color-surface)';
+                    li.style.padding = '10px 15px';
+                    li.style.borderRadius = '8px';
+                    li.style.marginBottom = '10px';
+                    li.style.display = 'flex';
+                    li.style.justifyContent = 'space-between';
+                    li.style.alignItems = 'center';
+                    li.style.borderLeftWidth = '3px';
+                    li.style.borderLeftStyle = 'solid';
+                    li.style.boxShadow = '0 2px 5px rgba(0,0,0,0.02)';
+
                     li.innerHTML = `
                         <div style="flex:1;">
                             <strong>${item.icon} ${item.name}</strong><br>
                             <small>${item.qty} un. × ${item.power}W × ${item.hours}h = <strong style="color: ${isGen ? '#10b981' : 'inherit'}">${item.energy} Wh</strong></small>
                         </div>
-                        <button class="remove-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;" onclick="removeLoad('${item.id}')" title="Depurar">×</button>
+                        <button class="remove-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #ef4444;" onclick="removeLoad('${item.id}')" title="Depurar">×</button>
                     `;
                     loadList.appendChild(li);
                 });
                 clearBtn.style.display = 'block';
             }
 
-            // No mostramos llenado negativo en el frasco visual
+            // Normalización visual: El tanque no puede "vaciarse" más allá del cero visualmente
             const displayWh = totalWh < 0 ? 0 : totalWh;
             let fillRatio = (displayWh / MAX_ENERGY_FOR_JAR) * 100;
             advJarFill.style.height = `${Math.min(fillRatio, 100)}%`;
             
+            // Reacción térmica del tanque según la carga del sistema
             if (totalWh < 0) {
-                // Color verde esmeralda puro cuando la generación supera al consumo
                 advJarFill.style.background = 'linear-gradient(0deg, #10b981 0%, #34d399 100%)'; 
             } else if(fillRatio > 80) {
                 advJarFill.style.background = 'linear-gradient(0deg, #ef4444 0%, #fca5a5 100%)';
@@ -155,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Ejecutar ignición
         syncFromStorage();
     }
 });
