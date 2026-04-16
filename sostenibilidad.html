@@ -4,17 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sostenibilidad | EcoPower</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="sub-page">
+
     <header class="navbar-wrapper">
         <nav class="navbar solid-nav">
-            <a href="index.html" class="logo"><span>EcoPower</span></a>
+            <a href="index.html" class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4CAF50" stroke-width="2"/>
+                    <path d="M13 10V3L5 14H11V21L19 10H13Z" fill="#FDD835"/>
+                    <path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C15.01 22 17.71 20.67 19.55 18.52L12 2Z" fill="#81C784" fill-opacity="0.3"/>
+                </svg>
+                <span>EcoPower</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="potencia.html">Potencia</a></li>
                 <li><a href="energia.html">Energía</a></li>
                 <li><a href="diferencias.html">Diferencia</a></li>
                 <li><a href="calculadora.html">Calculadora</a></li>
+                <li><a href="consejos.html">Consejos</a></li>
                 <li><a href="sostenibilidad.html" class="active">Sostenibilidad</a></li>
             </ul>
         </nav>
@@ -23,39 +35,43 @@
     <main class="container expanded-page">
         <section class="bubble giant-bubble" style="flex-direction: column;">
             <div class="bubble-text full-width center-text">
-                <h2>El Viaje del Fotón: De la Luz al Movimiento</h2>
-                <p class="large-text">La movilidad sostenible no es solo un coche eléctrico; es la gestión inteligente de la termodinámica.</p>
+                <h2>Movilidad Sostenible y Fotovoltaica</h2>
+                <p class="large-text">La eficiencia es el único camino racional. Analizamos la cadena: Sol → Panel → Batería → Trabajo.</p>
+            </div>
+            
+            <div class="split-panel full-split" style="gap: 40px; width: 100%;">
+                <div class="split-side logic-side">
+                    <div class="icon-wrap">☀️</div>
+                    <h3>Generación Solar</h3>
+                    <p>Captura de fotones para generar corriente continua.</p>
+                    <ul class="fast-facts">
+                        <li><strong>Radiación:</strong> 5.0 kWh/m²/día.</li>
+                        <li><strong>Producción:</strong> 1 panel de 400W produce ~2 kWh diarios.</li>
+                        <li><strong>Dato:</strong> 10 paneles cubren un hogar promedio de Cali.</li>
+                    </ul>
+                </div>
+
+                <div class="split-image logic-img">
+                    <div style="font-size: 5rem; text-align: center;">⚡🔌</div>
+                </div>
+
+                <div class="split-side logic-side">
+                    <div class="icon-wrap">🚗</div>
+                    <h3>Movilidad: Tesla Model 3</h3>
+                    <p>Transferencia de energía química a cinética.</p>
+                    <ul class="fast-facts">
+                        <li><strong>Batería:</strong> 60 kWh de capacidad nominal.</li>
+                        <li><strong>Consumo:</strong> 15 km de autonomía por cada hora de sol captada (10 paneles).</li>
+                        <li><strong>Impacto:</strong> Cero emisiones locales de CO2.</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="mission-list" style="margin: 40px 0; width: 100%;">
-                <div class="mission-item">
-                    <div class="mission-icon">☀️</div>
-                    <div class="mission-content">
-                        <h4>1. Radiación (Fuente)</h4>
-                        <p>El sol entrega aproximadamente 1000W por cada metro cuadrado en condiciones óptimas (Sol Pico).</p>
-                    </div>
-                </div>
-                <div class="mission-icon" style="text-align: center;">⬇️</div>
-                <div class="mission-item">
-                    <div class="mission-icon">🟦</div>
-                    <div class="mission-content">
-                        <h4>2. Captación (Eficiencia)</h4>
-                        <p>Los paneles solares modernos capturan cerca del 20% de esa energía. Si tienes 10m² de paneles, capturas 2000W de potencia instantánea.</p>
-                    </div>
-                </div>
-                <div class="mission-icon" style="text-align: center;">⬇️</div>
-                <div class="mission-item">
-                    <div class="mission-icon">🔌</div>
-                    <div class="mission-content">
-                        <h4>3. Almacenamiento (Batería)</h4>
-                        <p>Esa potencia fluye hacia el **Tesla Model 3** o tu **iPhone 15 Pro**. La energía acumulada (Wh) es lo que determina cuánto tiempo durará el dispositivo encendido.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="engineer-trick full-width">
-                <h3>📊 Datos de Producción Real</h3>
-                <p>En un hogar promedio, se consumen unos **6-10 kWh al día**. Un solo panel de 400W produce ~2 kWh diarios. Con solo 5 paneles, una casa puede ser energéticamente independiente.</p>
+            <div class="engineer-trick full-width" style="margin-top: 40px;">
+                <h3>📊 Rigor Cuantitativo</h3>
+                <p>Para cargar un <strong>Tesla Model 3 (60 kWh)</strong> al 100% usando solo paneles solares de 400W:</p>
+                <code>Tiempo = 150 horas de sol pico por panel.</code>
+                <p style="margin-top: 10px;">En un sistema doméstico con 5 paneles, se requieren **7.5 días** de radiación plena para una carga completa sin depender de la red eléctrica externa.</p>
             </div>
         </section>
     </main>
@@ -63,6 +79,7 @@
     <footer>
         <p>EcoPower - Ciencia y Sostenibilidad &copy; 2026</p>
     </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
