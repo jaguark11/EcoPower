@@ -138,7 +138,8 @@ h1, h2, h3, h4 {
     font-weight: 600;
     color: var(--color-text-main);
     max-width: 600px;
-    margin-bottom: 30px;
+    margin-bottom: 85px;
+    
 }
 
 .btn-primary {
@@ -261,12 +262,36 @@ h1, h2, h3, h4 {
     margin-bottom: 0;
 }
 
+.images-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        min-width: 320px;
+        flex: 0 0 auto;
+    }
+
+.images-center img {
+        width: 280px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 14px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+        border: 2px solid #e0f2e9;
+        transition: transform 0.2s;
+    }
+
+.images-center img:hover {
+        transform: scale(1.04);
+    }
+
 .center-text {
     text-align: center;
 }
 
 /* =========================================
-   Split Panel (Diferencia)
+Split Panel (Diferencia)
 ========================================= */
 .split-panel {
     display: flex;
@@ -644,7 +669,7 @@ footer {
 }
 
 .giant-bubble {
-    padding: 60px;
+    padding: 40px;
 }
 
 .large-text {
@@ -664,7 +689,7 @@ footer {
 
 /* Split Panel Specifics for Diferencias */
 .full-split {
-    margin-top: 40px;
+    margin-top: 10px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 30px;
