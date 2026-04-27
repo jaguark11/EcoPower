@@ -947,3 +947,40 @@ input[type="range"]::-webkit-slider-thumb {
         grid-template-columns: 1fr;
     }
 }
+
+/* Modo Oscuro Automático */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-background: #0f172a;
+        --color-surface: #1e293b;
+        --color-text-main: #cbd5e1;
+        --color-text-light: #94a3b8;
+        --color-heading: #f8fafc;
+        --color-primary-light: rgba(128, 222, 234, 0.15);
+        --color-secondary-light: rgba(134, 239, 172, 0.15);
+        --color-accent-light: rgba(253, 224, 71, 0.15);
+    }
+
+    .hero::before {
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 1) 100%);
+    }
+
+    .navbar, .solid-nav, .bubble, .module-card, .split-panel, .jar-container, .load-list-container, .calc-form-container {
+        background: #1e293b !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .fast-facts {
+        background: rgba(15, 23, 42, 0.5);
+    }
+
+    .jar {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    select, input[type="number"], .btn-secondary {
+        background: #0f172a;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}

@@ -8,6 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
     
 </head>
 <body class="sub-page">
@@ -77,10 +81,20 @@
             </div>
 
             <div class="engineer-trick full-width" style="margin-top: 40px;">
-                <h3>📊 Rigor Cuantitativo</h3>
-                <p>Para cargar un <strong>Tesla Model 3 (60 kWh)</strong> al 100% usando solo paneles solares de 400W:</p>
-                <code>Tiempo = 150 horas de sol pico por panel.</code>
-                <p style="margin-top: 10px;">En un sistema doméstico con 5 paneles, se requieren **7.5 días** de radiación plena para una carga completa sin depender de la red eléctrica externa.</p>
+                <h3>📊 Rigor Cuantitativo: ¿De dónde salen los 7.5 días?</h3>
+                <p>Para que cualquier persona pueda entenderlo, aquí está el cálculo lógico paso a paso:</p>
+                
+                <div class="info-box" style="background: var(--color-surface); text-align: left; border-left-color: #10b981;">
+                    <p><strong>1. Capacidad de la Batería:</strong> El Tesla necesita 60,000 Wh (60 kWh).</p>
+                    
+                    <p><strong>2. Potencia Instalada:</strong> 5 paneles × 400 W cada uno = 2,000 W de generación instantánea.</p>
+                    
+                    <p><strong>3. Tiempo de carga (Horas de Sol):</strong> 
+                    $$t = \frac{60,000\text{ Wh}}{2,000\text{ W}} = 30\text{ horas de sol directo}$$</p>
+                    
+                    <p><strong>4. Días de radiación:</strong> Dado que el sol pleno dura unas 4 horas al día (promedio aprovechable):
+                    $$\frac{30\text{ horas}}{4\text{ h/día}} = 7.5\text{ días}$$</p>
+                </div>
             </div>
         </section>
     </main>

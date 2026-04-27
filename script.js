@@ -19,11 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // El límite se establece en 30 kWh para soportar visualmente grandes cargas sin desbordar la interfaz
         const MAX_ENERGY_FOR_JAR = 30000; 
 
+        // Fallback para entornos sin soporte de crypto.randomUUID (como file://)
+        const generateId = () => (self.crypto && self.crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).substring(2, 11);
+
         // Estado inicial de la obra (Seeding estricto)
         const initialSeed = [
-            { id: crypto.randomUUID(), name: "Tesla Model 3 (Wallbox)", icon: "🚗", power: 11500, qty: 1, hours: 2, energy: 23000, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "iPhone 15 Pro", icon: "📱", power: 20, qty: 1, hours: 2, energy: 40, timestamp: new Date().toISOString() },
-            { id: crypto.randomUUID(), name: "Panel Solar Mono.", icon: "☀️", power: -400, qty: 5, hours: 5, energy: -10000, timestamp: new Date().toISOString() }
+            { id: generateId(), name: "Tesla Model 3 (Wallbox)", icon: "🚗", power: 11500, qty: 1, hours: 2, energy: 23000, timestamp: new Date().toISOString() },
+            { id: generateId(), name: "iPhone 15 Pro", icon: "📱", power: 20, qty: 1, hours: 2, energy: 40, timestamp: new Date().toISOString() },
+            { id: generateId(), name: "Panel Solar Mono.", icon: "☀️", power: -400, qty: 5, hours: 5, energy: -10000, timestamp: new Date().toISOString() }
         ];
 
         let currentLoads = [];
@@ -41,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const saveState = () => {
-            // Ordenamiento determinista para garantizar consistencia estructural
-            currentLoads.sort((a, b) => a.id.localeCompare(b.id));
+            // Ordenamos por timestamp para que los nuevos elementos aparezcan siempre al final
+            currentLoads.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
             localStorage.setItem(storageKey, JSON.stringify(currentLoads));
         };
 
@@ -81,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Validación estricta. Se aceptan valores negativos para representar la generación fotovoltaica
             if (powerVal !== 0 && qVal > 0 && hVal > 0) {
                 const newLoad = {
-                    id: crypto.randomUUID(),
+                    id: generateId(),
                     name: nodeName,
                     icon: nodeIcon,
                     power: powerVal,
