@@ -1,3 +1,19 @@
+conversión de 60 kWh = 60,000 Wh;
+cálculo de 5 paneles × 400 W = 2,000 W;
+fórmula Tiempo = Energía / Potencia;
+explicación de por qué salen 30 horas;
+explicación de por qué esas 30 horas se vuelven 7.5 días;
+nota para evitar confusión si alguien pregunta por 10 paneles;
+advertencia de que el cálculo es ideal y no incluye pérdidas reales.
+
+Aquí tienes el proyecto editado completo:
+
+Descargar EcoPower-main-editado.zip
+
+Y por si solo quieres reemplazar el archivo exacto:
+
+Descargar sostenibilidad-editada.html
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,11 +64,12 @@
                 <div class="split-side logic-side">
                     <div class="icon-wrap">☀️</div>
                     <h3>Generación Solar</h3>
-                    <p>Captura de fotones para generar corriente continua.</p>
+                    <p>Un panel solar no crea energía de la nada: transforma la radiación del Sol en electricidad. Para que el cálculo sea claro, se trabaja con la potencia de los paneles y con las horas reales de sol aprovechable durante el día.</p>
                     <ul class="fast-facts">
-                        <li><strong>Radiación:</strong> 5.0 kWh/m²/día.</li>
-                        <li><strong>Producción:</strong> 1 panel de 400W produce ~2 kWh diarios.</li>
-                        <li><strong>Dato:</strong> 10 paneles cubren un hogar promedio de Cali.</li>
+                        <li><strong>Potencia de 1 panel:</strong> 400 W = 0.4 kW.</li>
+                        <li><strong>Arreglo usado en el ejemplo:</strong> 5 paneles × 400 W = 2,000 W = 2 kW.</li>
+                        <li><strong>Sol útil asumido:</strong> 4 horas solares aprovechables por día.</li>
+                        <li><strong>Energía diaria ideal:</strong> 2 kW × 4 h = 8 kWh al día.</li>
                     </ul>
                 </div>
 
@@ -71,29 +88,58 @@
                 <div class="split-side logic-side">
                     <div class="icon-wrap">🚗</div>
                     <h3>Movilidad: Tesla Model 3</h3>
-                    <p>Transferencia de energía química a cinética.</p>
+                    <p>El Tesla almacena electricidad en una batería. Cargarlo significa llenar esa batería con energía eléctrica; después, el motor convierte esa energía en movimiento.</p>
                     <ul class="fast-facts">
-                        <li><strong>Batería:</strong> 60 kWh de capacidad nominal.</li>
-                        <li><strong>Consumo:</strong> 15 km de autonomía por cada hora de sol captada (10 paneles).</li>
-                        <li><strong>Impacto:</strong> Cero emisiones locales de CO2.</li>
+                        <li><strong>Batería del ejemplo:</strong> 60 kWh de capacidad nominal.</li>
+                        <li><strong>Conversión necesaria:</strong> 60 kWh = 60,000 Wh.</li>
+                        <li><strong>Objetivo del cálculo:</strong> estimar cuánto tardarían 5 paneles de 400 W en cargar la batería completa.</li>
+                        <li><strong>Impacto:</strong> no produce emisiones locales mientras se conduce; la sostenibilidad depende de cómo se genere la electricidad.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="engineer-trick full-width" style="margin-top: 40px;">
-                <h3>📊 Rigor Cuantitativo: ¿De dónde salen los 7.5 días?</h3>
-                <p>Para que cualquier persona pueda entenderlo, aquí está el cálculo lógico paso a paso:</p>
+                <h3>📊 Cálculo explicado: ¿de dónde salen los 7.5 días?</h3>
+                <p>El resultado no aparece por intuición: sale de relacionar tres ideas básicas. La batería indica cuánta energía se debe llenar, los paneles indican con qué potencia se entrega esa energía y las horas de sol útil convierten las horas de carga en días reales.</p>
                 
                 <div class="info-box" style="background: var(--color-surface); text-align: left; border-left-color: #10b981;">
-                    <p><strong>1. Capacidad de la Batería:</strong> El Tesla necesita 60,000 Wh (60 kWh).</p>
+                    <p><strong>Supuestos del ejemplo:</strong></p>
+                    <ul class="fast-facts">
+                        <li>La batería del Tesla se toma como una batería de <strong>60 kWh</strong>.</li>
+                        <li>Se usan <strong>5 paneles solares</strong> de <strong>400 W</strong> cada uno.</li>
+                        <li>Se consideran <strong>4 horas solares útiles al día</strong>.</li>
+                        <li>El cálculo es <strong>ideal</strong>: no incluye pérdidas por inversor, temperatura, cables, cargador o eficiencia de la batería.</li>
+                    </ul>
+
+                    <p><strong>1. Convertimos la batería a la misma unidad del cálculo:</strong></p>
+                    <p>La capacidad está en kWh, pero la potencia de los paneles está en W. Por eso se convierte la batería a Wh:</p>
+                    <p style="text-align: center;">$$60\text{ kWh} \times 1000 = 60,000\text{ Wh}$$</p>
+                    <p>Esto significa que, para llenar la batería completa, se necesitan aproximadamente <strong>60,000 Wh de energía</strong>.</p>
+
+                    <p><strong>2. Calculamos la potencia total de los paneles:</strong></p>
+                    <p>Cada panel entrega 400 W en condiciones favorables. Como son 5 paneles:</p>
+                    <p style="text-align: center;">$$5 \times 400\text{ W} = 2,000\text{ W}$$</p>
+                    <p>Es decir, el sistema solar del ejemplo puede entregar <strong>2,000 W</strong>, o lo mismo, <strong>2 kW</strong>.</p>
                     
-                    <p><strong>2. Potencia Instalada:</strong> 5 paneles × 400 W cada uno = 2,000 W de generación instantánea.</p>
+                    <p><strong>3. Calculamos cuántas horas de sol se necesitan:</strong></p>
+                    <p>La fórmula base es:</p>
+                    <p style="text-align: center;">$$\text{Tiempo} = \frac{\text{Energía}}{\text{Potencia}}$$</p>
+                    <p>Aplicando los valores:</p>
+                    <p style="text-align: center;">$$t = \frac{60,000\text{ Wh}}{2,000\text{ W}} = 30\text{ h}$$</p>
+                    <p>Estas <strong>30 horas</strong> no significan 30 horas seguidas de reloj, sino <strong>30 horas acumuladas de sol útil</strong>.</p>
                     
-                    <p><strong>3. Tiempo de carga (Horas de Sol):</strong> 
-                    $$t = \frac{60,000\text{ Wh}}{2,000\text{ W}} = 30\text{ horas de sol directo}$$</p>
-                    
-                    <p><strong>4. Días de radiación:</strong> Dado que el sol pleno dura unas 4 horas al día (promedio aprovechable):
-                    $$\frac{30\text{ horas}}{4\text{ h/día}} = 7.5\text{ días}$$</p>
+                    <p><strong>4. Convertimos las horas solares en días:</strong></p>
+                    <p>Como se asumen 4 horas solares útiles por día:</p>
+                    <p style="text-align: center;">$$\frac{30\text{ h}}{4\text{ h/día}} = 7.5\text{ días}$$</p>
+                    <p>Por eso el resultado final es que <strong>5 paneles de 400 W tardarían aproximadamente 7.5 días ideales</strong> en cargar una batería de 60 kWh desde 0% hasta 100%.</p>
+
+                    <p><strong>5. Verificación rápida:</strong></p>
+                    <p>Los 5 paneles producen al día:</p>
+                    <p style="text-align: center;">$$2\text{ kW} \times 4\text{ h/día} = 8\text{ kWh/día}$$</p>
+                    <p>Entonces:</p>
+                    <p style="text-align: center;">$$\frac{60\text{ kWh}}{8\text{ kWh/día}} = 7.5\text{ días}$$</p>
+
+                    <p><strong>Nota para evitar confusión:</strong> si en vez de 5 paneles se usaran 10 paneles de 400 W, la potencia sería el doble: 4 kW. En ese caso, el tiempo ideal bajaría a 3.75 días. Por eso es importante especificar siempre cuántos paneles se están usando.</p>
                 </div>
             </div>
         </section>
